@@ -1,7 +1,9 @@
 package com.project.management.ppm.services;
 
+import com.project.management.ppm.domain.Backlog;
 import com.project.management.ppm.domain.Project;
 import com.project.management.ppm.exception.ProjectIdException;
+import com.project.management.ppm.repository.BacklogRepository;
 import com.project.management.ppm.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +17,28 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private BacklogRepository backlogRepository;
+
     @Override
     public Project saveOrUpdateProject(Project project) {
         try {
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+            if (project.getId() == null) {
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+
+            } else {
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+
+            }
+
             return projectRepository.save(project);
         } catch (Exception e) {
-           throw new ProjectIdException("Project Id: "+project.getProjectIdentifier().toUpperCase()+" already exists");
+            throw new ProjectIdException("Project Id: " + project.getProjectIdentifier().toUpperCase() + " already exists");
         }
 
     }
@@ -29,8 +46,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProjectById(String projectId) {
 
-        Project project=projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-        if (project==null){
+        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
+        if (project == null) {
             throw new ProjectIdException("Project Id does not exists");
         }
         return project;
@@ -41,15 +58,13 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findAll();
     }
 
+    public void deleteByProjectId(String projectId) {
 
-
-    public void deleteByProjectId(String projectId){
-
-        Project project=projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-        if (project==null){
+        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
+        if (project == null) {
             throw new ProjectIdException("Project Id does not exists for deletion");
         }
-         projectRepository.delete(project);
+        projectRepository.delete(project);
     }
 
 }

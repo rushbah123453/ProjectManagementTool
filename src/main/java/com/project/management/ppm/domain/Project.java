@@ -1,6 +1,7 @@
 package com.project.management.ppm.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,6 +48,7 @@ public class Project {
     private Date updatedAt;
 
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "project")
+    @JsonIgnore
     private Backlog backlog;
 
     public Backlog getBacklog() {

@@ -35,4 +35,11 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
         return projectTaskRepository.save(projectTask);
     }
+
+
+   public Iterable<ProjectTask> getProjectTask(String id){
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
+    }
+
+
 }

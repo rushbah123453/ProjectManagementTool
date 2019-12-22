@@ -7,10 +7,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
-@NoArgsConstructor
 @Getter
 @Setter
 public class ProjectTask {
@@ -20,7 +20,7 @@ public class ProjectTask {
     private Long id;
 
     private String projectSequence;
-    @NotBlank(message = "Summary cannot be blank")
+    @NotBlank(message = "Sumary cannot be blank.")
     private String summary;
     private String acceptanceCriteria;
     private String status;
@@ -48,6 +48,8 @@ public class ProjectTask {
         this.updatedAt=new Date();
     }
 
+    public ProjectTask() {
+    }
 
     public Long getId() {
         return id;

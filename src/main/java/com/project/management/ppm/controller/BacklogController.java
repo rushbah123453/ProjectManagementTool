@@ -1,6 +1,8 @@
 package com.project.management.ppm.controller;
 
+import com.project.management.ppm.domain.Project;
 import com.project.management.ppm.domain.ProjectTask;
+import com.project.management.ppm.exception.ProjectTaskException;
 import com.project.management.ppm.services.ErrorMapService;
 import com.project.management.ppm.services.ProjectTaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.xml.ws.http.HTTPBinding;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/backlog")
@@ -24,10 +27,9 @@ public class BacklogController {
     private ErrorMapService errorMapService;
 
     @PostMapping("/{backlog_id}")
-    private ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody  ProjectTask projectTask, @PathVariable String backlog_id, BindingResult bindingResult){
-        ResponseEntity<?> errorMap=errorMapService.getErrorMap(bindingResult);
-        if (errorMap!=null) return  errorMap;
-
+    private ResponseEntity<?> addPTtoBacklogs(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResults,@PathVariable String backlog_id){
+        ResponseEntity<?> responseEntity=errorMapService.getErrorMap(bindingResults);
+        if (responseEntity!=null) return responseEntity;
         ProjectTask projectTask1= projectTaskService.addProject(backlog_id,projectTask);
 
         return new ResponseEntity<ProjectTask>(projectTask1,HttpStatus.CREATED);
@@ -38,8 +40,13 @@ public class BacklogController {
     @GetMapping("/{backlog_id}")
     private Iterable <ProjectTask> getProjectTaskByBacklogId(@PathVariable String backlog_id){
 
-        return projectTaskService.getProjectTask(backlog_id);
+       Iterable<ProjectTask> projectTask= projectTaskService.getProjectTask(backlog_id);
 
+       if(((Collection<?>) projectTask).size()==0){
+           throw new ProjectTaskException("Project "+backlog_id+" not found");
+       }
+
+        return projectTask;
 
 
     }

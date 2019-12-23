@@ -7,4 +7,8 @@ public interface ProjectTaskService {
     public ProjectTask addProject(String projectIdentifier,ProjectTask projectTask);
 
     public ProjectTask getProjectTaskBySequenceId(String backlog_id, String pt_id);
+
+    ProjectTask updateProjectTaskByProjectSequenceId(ProjectTask projectTask, String backlog_id, String pt_id);
+
+    void deleteProjectTaskByProjectSequenceId(String backlog_id, String pt_id);
 }

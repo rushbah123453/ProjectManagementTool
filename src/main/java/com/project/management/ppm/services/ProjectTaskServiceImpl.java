@@ -1,6 +1,7 @@
 package com.project.management.ppm.services;
 
 import com.project.management.ppm.domain.Backlog;
+import com.project.management.ppm.domain.Project;
 import com.project.management.ppm.domain.ProjectTask;
 import com.project.management.ppm.exception.BacklogNotFoundException;
 import com.project.management.ppm.exception.ProjectIdException;
@@ -67,6 +68,23 @@ try{
 
         else
             throw new BacklogNotFoundException("ProjectNotFound:"+backlog_id+" not found");
+
+    }
+
+    @Override
+    public ProjectTask updateProjectTaskByProjectSequenceId(ProjectTask updatedprojectTask, String backlog_id, String pt_id) {
+
+
+        ProjectTask projectTask=getProjectTaskBySequenceId(backlog_id,pt_id);
+        projectTask=updatedprojectTask;
+       return projectTaskRepository.save(projectTask);
+
+    }
+
+    @Override
+    public void deleteProjectTaskByProjectSequenceId(String backlog_id, String pt_id) {
+        ProjectTask projectTask=getProjectTaskBySequenceId(backlog_id,pt_id);
+        projectTaskRepository.delete(projectTask);
 
     }
 }

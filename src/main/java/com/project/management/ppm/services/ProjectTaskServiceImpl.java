@@ -48,9 +48,12 @@ try{
     }
 
 
-   public Iterable<ProjectTask> getProjectTask(String id){
+   public Iterable<ProjectTask> getProjectTasksByBacklogId(String id){
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
 
+    public ProjectTask getProjectTaskBySequenceId(String backlog_id, String pt_id) {
+        return projectTaskRepository.findByProjectSequence(pt_id);
+    }
 }

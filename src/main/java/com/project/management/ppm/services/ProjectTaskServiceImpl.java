@@ -4,6 +4,7 @@ import com.project.management.ppm.domain.Backlog;
 import com.project.management.ppm.domain.ProjectTask;
 import com.project.management.ppm.exception.BacklogNotFoundException;
 import com.project.management.ppm.exception.ProjectIdException;
+import com.project.management.ppm.exception.ProjectTaskException;
 import com.project.management.ppm.repository.BacklogRepository;
 import com.project.management.ppm.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,18 @@ try{
 
 
     public ProjectTask getProjectTaskBySequenceId(String backlog_id, String pt_id) {
-        return projectTaskRepository.findByProjectSequence(pt_id);
+        Backlog backlog=backlogRepository.findByProjectIdentifier(backlog_id);
+        if (backlog!=null){
+            ProjectTask projectTask= projectTaskRepository.findByProjectSequence(pt_id);
+            if (projectTask!=null)
+                return projectTask;
+            else
+                throw new ProjectTaskException("Project Task with "+pt_id+" not found");
+
+        }
+
+        else
+            throw new BacklogNotFoundException("ProjectNotFound:"+backlog_id+" not found");
+
     }
 }

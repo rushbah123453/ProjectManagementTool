@@ -39,7 +39,7 @@ public class BacklogController {
     private Iterable<ProjectTask> getProjectTaskByBacklogId(@PathVariable String backlog_id) {
         Iterable<ProjectTask> projectTask = projectTaskService.getProjectTasksByBacklogId(backlog_id);
         if (((Collection<?>) projectTask).size() == 0) {
-            throw new ProjectTaskException("Project " + backlog_id + " not found");
+            throw new ProjectTaskException("No Project Task in " + backlog_id + " . Please Create Project Task ");
         }
         return projectTask;
     }

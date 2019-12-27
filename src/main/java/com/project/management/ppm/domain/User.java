@@ -94,13 +94,13 @@ public class User implements UserDetails {
         return null;
     }
 
-    @JsonIgnore
+
     @Override
     public String getPassword() {
         return password;
     }
 
-    @JsonIgnore
+
     @Override
     public String getUsername() {
         return username;

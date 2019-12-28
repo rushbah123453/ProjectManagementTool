@@ -1,9 +1,13 @@
 package com.project.management.ppm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.sun.glass.ui.View;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -34,8 +38,8 @@ public class User implements UserDetails {
     @NotBlank(message = "password cannot be blank")
     private String password;
 
-    @Transient
-    @JsonIgnore
+    @Transient // Dont want to persist confirmPassword , As encrypted password is already persisted
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)   // Dont want to see confirmPassword in response
     private String confirmPassword;
 
     private Date createdAt;

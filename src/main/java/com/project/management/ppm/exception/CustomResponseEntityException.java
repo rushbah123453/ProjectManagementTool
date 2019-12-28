@@ -30,4 +30,13 @@ public class CustomResponseEntityException extends ResponseEntityExceptionHandle
         return new ResponseEntity(projectTaskNotFoundExceptionResponse,HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException userAlreadyExistsException,WebRequest webRequest){
+        UserAlreadyExistsExceptionResponse userAlreadyExistsExceptionResponse=new UserAlreadyExistsExceptionResponse(userAlreadyExistsException.getMessage());
+        return new ResponseEntity<>(userAlreadyExistsExceptionResponse,HttpStatus.BAD_REQUEST);
+
+    }
+
+
+
 }

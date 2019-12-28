@@ -34,7 +34,7 @@ public class ProjectTask {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "backlog_id",updatable = false,nullable = false)
-    @JsonIgnore
+    @JsonIgnore // it wont serialize backlog object and hence we cant see it in response
     private Backlog backlog;
 
 

@@ -24,7 +24,7 @@ public class Backlog {
     //oneToOne Backlog with Project
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id",nullable = false)
-    @JsonIgnore
+    @JsonIgnore // it wont serialize project object and hence we cant see it in response
     private Project project;
 
 

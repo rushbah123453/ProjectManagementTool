@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 import static com.project.management.ppm.constants.SecurityConstants.HEADER_STRING;
+import static com.project.management.ppm.constants.SecurityConstants.TOKEN_PREFIX;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
@@ -58,7 +59,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private String getJWTFromRequest(HttpServletRequest httpServletRequest){
         String bearerString=httpServletRequest.getHeader(HEADER_STRING);
-        if (StringUtils.hasText(bearerString)&&bearerString.startsWith(HEADER_STRING)){
+        if (StringUtils.hasText(bearerString)&&bearerString.startsWith(TOKEN_PREFIX)){
             return bearerString.substring(7,bearerString.length());
         }
         return null;

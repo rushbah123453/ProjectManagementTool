@@ -29,6 +29,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project saveOrUpdateProject(Project project, String userName) {
+
+
+        if(project.getId()!=null){
+            Project existingProject=projectRepository.findByProjectIdentifier(project.getProjectIdentifier());
+            if (existingProject!=null && (!existingProject.getProjectLeader().equals(userName))){
+                throw new BacklogNotFoundException("Project Not found in your account");
+            }else if(existingProject==null){
+                throw new BacklogNotFoundException("Project with ID : "+project.getProjectIdentifier()+" cannot be updated , as it doesnot exists");
+            }
+        }
+
         try {
 
             User user=userRepository.findByUsername(userName);

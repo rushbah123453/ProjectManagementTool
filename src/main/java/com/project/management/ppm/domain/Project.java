@@ -51,6 +51,20 @@ public class Project {
     @JsonIgnore // it wont serialize backlog object and hence we cant see it in response
     private Backlog backlog;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private User user; // many project can belong to one user
+
+    private String projectLeader;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Backlog getBacklog() {
         return backlog;
     }
@@ -131,5 +145,13 @@ public class Project {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getProjectLeader() {
+        return projectLeader;
+    }
+
+    public void setProjectLeader(String projectLeader) {
+        this.projectLeader = projectLeader;
     }
 }

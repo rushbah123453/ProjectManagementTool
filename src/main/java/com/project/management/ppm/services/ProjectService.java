@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface ProjectService {
 
-    public Project saveOrUpdateProject(Project project);
+    public Project saveOrUpdateProject(Project project,String userName);
 
     public Project getProjectById(String projectId);
 

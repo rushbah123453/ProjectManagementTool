@@ -2,9 +2,11 @@ package com.project.management.ppm.services;
 
 import com.project.management.ppm.domain.Backlog;
 import com.project.management.ppm.domain.Project;
+import com.project.management.ppm.domain.User;
 import com.project.management.ppm.exception.ProjectIdException;
 import com.project.management.ppm.repository.BacklogRepository;
 import com.project.management.ppm.repository.ProjectRepository;
+import com.project.management.ppm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,9 +22,17 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private BacklogRepository backlogRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
-    public Project saveOrUpdateProject(Project project) {
+    public Project saveOrUpdateProject(Project project, String userName) {
         try {
+
+            User user=userRepository.findByUsername(userName);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
+
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
             if (project.getId() == null) {

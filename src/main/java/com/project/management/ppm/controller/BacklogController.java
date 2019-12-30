@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Collection;
 
 @RestController
@@ -25,10 +26,10 @@ public class BacklogController {
     private ErrorMapService errorMapService;
 
     @PostMapping("/{backlog_id}")
-    private ResponseEntity<?> addPTtoBacklogs(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResults, @PathVariable String backlog_id) {
+    private ResponseEntity<?> addPTtoBacklogs(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResults, @PathVariable String backlog_id, Principal principal) {
         ResponseEntity<?> responseEntity = errorMapService.getErrorMap(bindingResults);
         if (responseEntity != null) return responseEntity;
-        ProjectTask projectTask1 = projectTaskService.addProject(backlog_id, projectTask);
+        ProjectTask projectTask1 = projectTaskService.addProject(backlog_id, projectTask,principal.getName());
 
         return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.CREATED);
 
@@ -36,8 +37,8 @@ public class BacklogController {
 
 
     @GetMapping("/{backlog_id}")
-    private Iterable<ProjectTask> getProjectTaskByBacklogId(@PathVariable String backlog_id) {
-        Iterable<ProjectTask> projectTask = projectTaskService.getProjectTasksByBacklogId(backlog_id);
+    private Iterable<ProjectTask> getProjectTaskByBacklogId(@PathVariable String backlog_id,Principal principal) {
+        Iterable<ProjectTask> projectTask = projectTaskService.getProjectTasksByBacklogId(backlog_id,principal.getName());
         if (((Collection<?>) projectTask).size() == 0) {
             throw new ProjectTaskException("No Project Task in " + backlog_id + " . Please Create Project Task ");
         }
@@ -45,19 +46,19 @@ public class BacklogController {
     }
 
     @GetMapping("/{backlog_id}/{pt_id}")
-    private ResponseEntity<?> getProjectTaskBySequenceId(@PathVariable String backlog_id, @PathVariable String pt_id  ){
-        ProjectTask projectTask=projectTaskService.getProjectTaskBySequenceId(backlog_id,pt_id);
+    private ResponseEntity<?> getProjectTaskBySequenceId(@PathVariable String backlog_id, @PathVariable String pt_id ,Principal principal ){
+        ProjectTask projectTask=projectTaskService.getProjectTaskBySequenceId(backlog_id,pt_id,principal.getName());
         return new ResponseEntity<>(projectTask, HttpStatus.OK);
     }
 
 
     @PatchMapping("/{backlog_id}/{pt_id}")
     private ResponseEntity<?> updateProjectTaskByProjectSequenceId(@Valid @RequestBody ProjectTask projectTask, BindingResult bindingResult,
-                                                                   @PathVariable String backlog_id,  @PathVariable String pt_id)
+                                                                   @PathVariable String backlog_id,  @PathVariable String pt_id,Principal principal )
     {
         ResponseEntity<?> responseEntity = errorMapService.getErrorMap(bindingResult);
         if (responseEntity != null) return responseEntity;
-        ProjectTask projectTask1=projectTaskService.updateProjectTaskByProjectSequenceId(projectTask,backlog_id,pt_id);
+        ProjectTask projectTask1=projectTaskService.updateProjectTaskByProjectSequenceId(projectTask,backlog_id,pt_id,principal.getName());
         return new ResponseEntity<>(projectTask1,HttpStatus.OK);
 
     }
@@ -65,9 +66,9 @@ public class BacklogController {
 
 
     @DeleteMapping("/{backlog_id}/{pt_id}")
-    private ResponseEntity<?> deleteProjectTaskByProjectSequenceId(@PathVariable String backlog_id,  @PathVariable String pt_id){
+    private ResponseEntity<?> deleteProjectTaskByProjectSequenceId(@PathVariable String backlog_id,  @PathVariable String pt_id,Principal principal ){
 
-        projectTaskService.deleteProjectTaskByProjectSequenceId(backlog_id,pt_id);
+        projectTaskService.deleteProjectTaskByProjectSequenceId(backlog_id,pt_id,principal.getName());
         return new ResponseEntity<>("Project Task "+pt_id+" deleted !!",HttpStatus.OK);
     }
 

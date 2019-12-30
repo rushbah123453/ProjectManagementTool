@@ -3,6 +3,7 @@ package com.project.management.ppm.services;
 import com.project.management.ppm.domain.Backlog;
 import com.project.management.ppm.domain.Project;
 import com.project.management.ppm.domain.User;
+import com.project.management.ppm.exception.BacklogNotFoundException;
 import com.project.management.ppm.exception.ProjectIdException;
 import com.project.management.ppm.repository.BacklogRepository;
 import com.project.management.ppm.repository.ProjectRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.xml.ws.ServiceMode;
+import java.security.Principal;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -54,27 +56,28 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getProjectById(String projectId) {
+    public Project getProjectById(String projectId,String userName) {
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
         if (project == null) {
             throw new ProjectIdException("Project Id does not exists");
         }
+
+        if (!project.getProjectLeader().equals(userName)){
+            throw new BacklogNotFoundException("Project Not found in your account");
+        }
+
         return project;
     }
 
     @Override
-    public Iterable getAllProject() {
-        return projectRepository.findAll();
+    public Iterable getAllProject(String projectLeader) {
+        return projectRepository.findAllByProjectLeader(projectLeader);
     }
 
-    public void deleteByProjectId(String projectId) {
+    public void deleteByProjectId(String projectId,String userName) {
 
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-        if (project == null) {
-            throw new ProjectIdException("Project Id does not exists for deletion");
-        }
-        projectRepository.delete(project);
+        projectRepository.delete(getProjectById(projectId,userName));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.project.management.ppm.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +26,11 @@ public class ProjectTask {
     private String acceptanceCriteria;
     private String status;
     private Integer priority;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date dueDate;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date createdAt;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updatedAt;
     @Column(updatable = false)
     private String projectIdentifier;

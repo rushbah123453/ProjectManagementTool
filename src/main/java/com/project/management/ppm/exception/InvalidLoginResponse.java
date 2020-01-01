@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class InvalidLoginResponse {
-    private String usename;
+    private String username;
     private String password;
 
     public InvalidLoginResponse() {
-        this.usename = "Invalid Username";
+        this.username = "Invalid Username";
         this.password = "Invalid Password";
     }
 

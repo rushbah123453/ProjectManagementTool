@@ -3,7 +3,7 @@ package com.project.management.ppm.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.sun.glass.ui.View;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
